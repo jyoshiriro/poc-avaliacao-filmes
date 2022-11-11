@@ -16,7 +16,7 @@ public class AvaliacaoFilme {
 
     public int getVotos() {
         try {
-            return Integer.parseInt(votos.replaceAll("[^\\d.]", ""));
+            return votos == null ? 0 : Integer.parseInt(votos.replaceAll("[^\\d.]", ""));
         } catch (NumberFormatException excecao) { // retorna valores como N/A" :(
             return 0;
         }
