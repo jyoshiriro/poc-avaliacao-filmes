@@ -43,8 +43,7 @@ public class AvaliacoesController { // ou AvaliacoesResource
                                          @Parameter(description = "Filme que julga ser o vencedor. Apenas 1 ou 2")
                                          int filmeVencedor,
                                          Authentication authentication) {
-        return status(OK).body(
-                                partidaService.jogarPartida(authentication.getName(), idPartida, filmeVencedor));
+        return status(OK).body(partidaService.jogarPartida(authentication.getName(), idPartida, filmeVencedor));
     }
 
     @GetMapping("/ranking")
