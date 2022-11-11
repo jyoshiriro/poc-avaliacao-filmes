@@ -12,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -28,7 +29,7 @@ public class AvaliacoesController { // ou AvaliacoesResource
     private final PartidaService partidaService;
 
     @PostMapping
-    public ResponseEntity<Partida> iniciar(@RequestBody IniciarPartidaRequest request,
+    public ResponseEntity<Partida> iniciar(@RequestBody @Valid IniciarPartidaRequest request,
                                            Authentication authentication) {
         request.setJogador(authentication.getName());
         return status(CREATED).body(partidaService.iniciarPartida(request));
