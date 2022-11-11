@@ -8,6 +8,6 @@ import lombok.Getter;
 public class PontuacaoJogadorReponse {
 
     private String jogador;
-    private long pontos;
+    private double pontuacao;
 
 }

@@ -29,8 +29,18 @@ public interface PartidaRepository extends JpaRepository<Partida, Integer> {
     boolean existsByFilmes(String jogador, String idFilme1, String idFilme2);
 
     @Query("""
-    select new ada.apiavaliacaofilmes.resposta.PontuacaoJogadorReponse(p.jogador, count(p.jogador)) 
-    from Partida p where p.aposta = p.vencedor group by p.jogador order by count(p.jogador) desc, p.jogador
+    select new ada.apiavaliacaofilmes.resposta.PontuacaoJogadorReponse(
+        p.jogador, 
+        ( 
+          count(p.jogador) * 
+          ((select count(p2.jogador) from Partida p2 
+            where p2.jogador = p.jogador and p2.aposta = p2.vencedor) / (count(p.jogador)*1.0)) * 100 
+        ) as pontuacao 
+    )
+    from Partida p 
+    group by p.jogador
+    order by pontuacao desc
     """)
     List<PontuacaoJogadorReponse> findPontuacoes();
+
 }
