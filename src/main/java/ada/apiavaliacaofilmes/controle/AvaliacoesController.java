@@ -1,24 +1,22 @@
 package ada.apiavaliacaofilmes.controle;
 
-import ada.apiavaliacaofilmes.dominio.AvaliacaoFilme;
 import ada.apiavaliacaofilmes.dominio.Partida;
 import ada.apiavaliacaofilmes.requisicao.IniciarPartidaRequest;
 import ada.apiavaliacaofilmes.resposta.PontuacaoJogadorReponse;
-import ada.apiavaliacaofilmes.servico.OmdbService;
 import ada.apiavaliacaofilmes.servico.PartidaService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.status;
 
 
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class AvaliacoesController { // ou AvaliacoesResource
     public ResponseEntity<Partida> iniciar(@RequestBody IniciarPartidaRequest request,
                                            Authentication authentication) {
         request.setJogador(authentication.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(partidaService.iniciarPartida(request));
+        return status(CREATED).body(partidaService.iniciarPartida(request));
     }
 
     @PatchMapping("/{idPartida}/{filmeVencedor}")
@@ -44,7 +42,7 @@ public class AvaliacoesController { // ou AvaliacoesResource
                                          @Parameter(description = "Filme que julga ser o vencedor. Apenas 1 ou 2")
                                          int filmeVencedor,
                                          Authentication authentication) {
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return status(OK).body(
                                 partidaService.jogarPartida(authentication.getName(), idPartida, filmeVencedor));
     }
 
@@ -53,7 +51,7 @@ public class AvaliacoesController { // ou AvaliacoesResource
         List<PontuacaoJogadorReponse> ranking = partidaService.getRanking();
 
         return ranking.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-                : ResponseEntity.status(HttpStatus.OK).body(ranking);
+                ? status(HttpStatus.NO_CONTENT).build()
+                : status(OK).body(ranking);
     }
 }
