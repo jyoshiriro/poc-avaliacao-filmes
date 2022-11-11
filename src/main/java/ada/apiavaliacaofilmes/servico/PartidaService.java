@@ -40,6 +40,7 @@ public class PartidaService {
 
     protected void validarNovaPartida(Partida partida) {
         String erro = null;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
         if (partidaRepository.countErrosPorJogador(partida.getJogador()) > limiteErrors) {
             erro = "Não é possível jogar após %d erros".formatted(limiteErrors+1);
@@ -48,10 +49,11 @@ public class PartidaService {
         } else
             if (partidaRepository.existsByFilmes(partida.getJogador(), partida.getIdFilme1(), partida.getIdFilme2())) {
             erro = "Já existe uma partida com os mesmos 2 filmes para você";
+            status = HttpStatus.CONFLICT;
         }
 
         if (erro != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, erro);
+            throw new ResponseStatusException(status, erro);
         }
     }
 
@@ -75,10 +77,11 @@ public class PartidaService {
         if (filmeVencedor < 1 || filmeVencedor > 2) {
             erro = "Filme vencedor deve ser 1 ou 2. Recebido: %d".formatted(filmeVencedor);
         } else if (!partidaRepository.existsById(idPartida)) {
-            erro = "Partida %d não existe".formatted(filmeVencedor);
+            erro = "Partida %d não existe".formatted(idPartida);
             status = HttpStatus.NOT_FOUND;
         } else if (!partidaRepository.existsByIdAndJogador(idPartida, jogador)) {
-            erro = "Essa partida não é de outro jogador"; // regra não descrita na tarefa
+            erro = "Essa partida é de outro jogador"; // regra não descrita na tarefa
+            status = HttpStatus.CONFLICT;
         } else if (partidaRepository.existsByIdAndApostaIsNotNull(idPartida)) {
             erro = "Essa partida já foi finalizada";
         }

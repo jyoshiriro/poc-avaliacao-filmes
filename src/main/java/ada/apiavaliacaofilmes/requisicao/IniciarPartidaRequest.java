@@ -33,25 +33,4 @@ public class IniciarPartidaRequest {
         }
     }
 
- /*   public String getCombinacaoFilmes() {
-        return Stream.of(filme1, filme2).sorted().collect(Collectors.joining(" e "));
-    }*/
-
-    /*public static void main(String[] args) {
-        var r1 = new IniciarPartidaRequest(1, "j1", "fa", "fb");
-        var r2 = new IniciarPartidaRequest(2, "j1", "fb", "fa");
-
-        System.out.println(r1.getCombinacaoFilmes());
-        System.out.println(r2.getCombinacaoFilmes());
-
-        Map<String, List<IniciarPartidaRequest>> res1 = List.of(r1,r2).stream()
-                .collect(groupingBy(IniciarPartidaRequest::getCombinacaoFilmes));
-
-        var res2 = List.of(r1,r2).stream()
-                .collect(Collectors.groupingBy(IniciarPartidaRequest::getCombinacaoFilmes, Collectors.counting()));
-
-        System.out.println(res1);
-        System.out.println(res2); // este!
-    }
-*/
 }

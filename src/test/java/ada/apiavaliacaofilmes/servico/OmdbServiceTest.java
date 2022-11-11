@@ -7,8 +7,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -20,17 +18,18 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@SpringBootTest(classes = OmdbService.class)
 class OmdbServiceTest {
 
     OmdbService service;
 
-    @MockBean
     OmdbClienteApi clienteApi;
 
     @BeforeEach
     void setup() throws IllegalAccessException {
+        clienteApi = mock(OmdbClienteApi.class);
+
         service = new OmdbService(clienteApi);
+
         FieldUtils.writeDeclaredField(service, "apiKey", "minhachave", true);
     }
 
